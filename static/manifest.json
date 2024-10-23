@@ -1,0 +1,26 @@
+{
+  "name": "Noter",
+  "short_name": "Noter",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#252529",
+  "background_color": "#1B1B1F",
+  "description": "Web PWA of Notes",
+  "icons": [
+    {
+      "src": "pwa-64x64.png",
+      "type": "image/png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "pwa-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "pwa-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
