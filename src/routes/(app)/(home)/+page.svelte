@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Note from '$lib/notes/ui/note.svelte';
 	import { getAllNotes } from '$lib/notes/usecases/get-all-notes';
 	let notesPromise = $state.raw(getAllNotes());
@@ -12,11 +12,12 @@
 			<Note {...note} />
 		{/each}
 	{/await}
-	<button
-		class="bg-gray font-bold rounded-full h-11"
-		type="button"
-		onclick={() => (notesPromise = getAllNotes())}
-	>
-		Reload
-	</button>
 </div>
+
+<button
+	class="bg-gray font-bold rounded-full h-11"
+	type="button"
+	onclick={() => (notesPromise = getAllNotes())}
+>
+	Reload
+</button>
