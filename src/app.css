@@ -1,9 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   body {
-    @apply text-white bg-base;
+    @apply bg-constrast;
+    @apply text-dark;
   }
 }

@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { createNote } from '../usecases/create-note';
+	import { goto } from '$app/navigation';
 
-	let content: string = $state('<p>Escribe aquí...</p>');
+	let content: string = $state('');
+	let title: string = $state('Not title');
 	let history: string[] = $state([]);
 	let redoStack: string[] = $state([]);
 	let editor: HTMLElement;
@@ -58,11 +61,12 @@
 </script>
 
 {#snippet toolbar()}
-	<div class="flex justify-between w-full border-b-[1px] border-gray h-14">
+	<div class="flex justify-between w-full bg-white h-14 bg-base">
 		<input
 			class="text-xl px-4 outline-none text-ellipsis min-w-40 w-full bg-transparent"
 			type="text"
 			placeholder="Title"
+			bind:value={title}
 		/>
 		<div class="flex">
 			<button aria-label="undo" onclick={undo} class="bg-gray-200 p-2">
@@ -114,7 +118,14 @@
 					</svg>
 				</span>
 			</button>
-			<button aria-label="save" onclick={redo} class="bg-gray-200 p-2">
+			<button
+				aria-label="save"
+				onclick={() => {
+					createNote({ id: Date.now().toString(), content, title });
+					goto('/');
+				}}
+				class="bg-gray-200 p-2"
+			>
 				<span>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 						<path
@@ -128,12 +139,12 @@
 	</div>
 {/snippet}
 
-<div class="flex flex-col gap-2 items-center h-svh">
+<div class="flex flex-col tablet:gap-8 pb-8 items-center h-svh">
 	{@render toolbar()}
 	<div
 		bind:this={editor}
 		oninput={updateEditor}
 		contenteditable="true"
-		class="outline-none w-full h-full overflow-y-auto px-4 text-lg"
+		class="bg-white border-gray/30 border p-4 outline-none w-full h-full overflow-y-auto tablet:max-w-screen-tablet tablet:p-12 text-lg"
 	></div>
 </div>

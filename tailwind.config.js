@@ -3,19 +3,18 @@ export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     colors: {
-      base: "#1B1B1F",
-      constrast: "#252529",
-      white: "#DCDCE5",
+      dark: "#222222",
+      constrast: "#F5F6F8",
+      white: "#FFFFFF",
       gray: "#313137",
       transparent: "transparent",
-      primary: "#D7D7F1",
-      warning: "#FFF7E9",
-      danger: "#FFEAE1",
-      success: "#E9FFFF",
     },
     extend: {
       screens: {
-        tablet: "640px"
+        small: "100px",
+        phone: "320px",
+        tablet: "640px",
+        desktop: "1020px",
       }
     }
   },

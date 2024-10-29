@@ -1,4 +1,4 @@
-<div class="bg-constrast h-12 rounded-full flex gap-3 items-center px-5 tablet:w-full w-65">
+<div class="h-10 flex gap-3 items-center px-4 tablet:w-full">
 	<span>
 		<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none">
 			<path
@@ -15,5 +15,9 @@
 			/>
 		</svg>
 	</span>
-	<input class="bg-transparent outline-none bg-danger w-full" placeholder="Search your notes" type="search" />
+	<input
+		class="bg-transparent outline-none w-full text-dark"
+		placeholder="Search your notes"
+		type="search"
+	/>
 </div>
