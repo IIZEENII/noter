@@ -61,7 +61,7 @@ self.addEventListener('sync', (event) => {
 });
 
 async function syncNotesWithApi() {
-    const notesToSync = getNotesFromDatabase();
+    const notesToSync = await getNotesFromDatabase();
 
     if (!Array.isArray(notesToSync)) {
         console.error('No se obtuvieron notas válidas para sincronizar.');
@@ -70,8 +70,8 @@ async function syncNotesWithApi() {
 
     for (const note of notesToSync) {
         try {
-            await sendToApi(note);
-            deleteNoteFromDatabase(note.id);
+            await sendToApi(note); 
+            await deleteNoteFromDatabase(note.id);
         } catch (error) {
             console.error('Error al sincronizar nota:', error);
         }
@@ -84,17 +84,42 @@ async function sendToApi(note) {
         body: JSON.stringify(note),
         headers: { 'Content-Type': 'application/json' },
     });
-    
+
     if (!response.ok) throw new Error('Error al enviar los datos');
 }
 
-function getNotesFromDatabase() {
-    const storedNotes = localStorage.getItem('noter_notes');
-    return storedNotes ? JSON.parse(storedNotes) : [];
+async function getNotesFromDatabase() {
+    return new Promise((resolve, reject) => {
+        const dbRequest = indexedDB.open('NoterDB', 10);
+
+        dbRequest.onsuccess = () => {
+            const db = dbRequest.result;
+            const transaction = db.transaction(['notes'], 'readonly');
+            const store = transaction.objectStore('notes');
+            const getAllRequest = store.getAll();
+
+            getAllRequest.onsuccess = () => resolve(getAllRequest.result);
+            getAllRequest.onerror = () => reject(getAllRequest.error);
+        };
+
+        dbRequest.onerror = () => reject(dbRequest.error);
+    });
 }
 
-function deleteNoteFromDatabase(id) {
-    const notes = getNotesFromDatabase();
-    const updatedNotes = notes.filter((note) => note.id !== id);
-    localStorage.setItem('noter_notes', JSON.stringify(updatedNotes));
+async function deleteNoteFromDatabase(id) {
+    return new Promise((resolve, reject) => {
+        const dbRequest = indexedDB.open('noter', 10);
+
+        dbRequest.onsuccess = () => {
+            const db = dbRequest.result;
+            const transaction = db.transaction(['notes'], 'readwrite');
+            const store = transaction.objectStore('notes');
+            const deleteRequest = store.delete(id);
+
+            deleteRequest.onsuccess = () => resolve();
+            deleteRequest.onerror = () => reject(deleteRequest.error);
+        };
+
+        dbRequest.onerror = () => reject(dbRequest.error);
+    });
 }
